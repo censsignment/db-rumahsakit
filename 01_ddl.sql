@@ -1,4 +1,4 @@
-CREATE DATABASE db_rumah_sakit;
+CREATE DATABASE IF NOT EXISTS db_rumah_sakit;
 USE db_rumah_sakit;
 
 CREATE TABLE poli (
