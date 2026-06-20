@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS db_rumah_sakit;
 CREATE DATABASE IF NOT EXISTS db_rumah_sakit;
 USE db_rumah_sakit;
 
@@ -136,9 +137,8 @@ INSERT INTO poli (id_poli, nama_poli, lokasi)
 VALUES
 ('POL01', 'Umum', 'Gedung A Lantai 1'),
 ('POL02', 'Penyakit Dalam', 'Gedung C Lantai 2'),
-('POL03', 'Penyakit Dalam', 'Gedung C Lantai 2'),
-('POL04', 'Bedah', 'Gedung D Lantai 3'),
-('POL05', 'Gigi dan Mulut', 'Gedung E Lantai 1');
+('POL03', 'Bedah', 'Gedung D Lantai 3'),
+('POL04', 'Gigi dan Mulut', 'Gedung E Lantai 1');
 
 
 -- =====================================
@@ -148,9 +148,9 @@ INSERT INTO dokter (id_dokter, id_poli, nama_dokter, spesialis)
 VALUES
 ('D01', 'POL01', 'dr. Andi Wirawan', 'Dokter Umum'),
 ('D02', 'POL01', 'dr. Siti Rahayu', 'Dokter Umum'),
-('D03', 'POL03', 'dr. Hendra Prasetyo, Sp.PD', 'Spesialis Penyakit Dalam'),
-('D04', 'POL04', 'dr. Rizky Firmansyah, Sp.B', 'Spesialis Bedah'),
-('D05', 'POL05', 'drg. Fajar Nugroho, Sp.KG', 'Spesialis Konservasi Gigi'),
+('D03', 'POL02', 'dr. Hendra Prasetyo, Sp.PD', 'Spesialis Penyakit Dalam'),
+('D04', 'POL03', 'dr. Rizky Firmansyah, Sp.B', 'Spesialis Bedah'),
+('D05', 'POL04', 'drg. Fajar Nugroho, Sp.KG', 'Spesialis Konservasi Gigi'),
 ('D06', 'POL02', 'dr. Lina Marlina, Sp.PD', 'Spesialis Penyakit Dalam');
 
 
@@ -568,7 +568,7 @@ JOIN dokter d ON j.id_dokter = d.id_dokter
 JOIN poli po ON d.id_poli = po.id_poli
 LEFT JOIN rekam_medis rm ON pf.id_pendaftaran = rm.id_pendaftaran
 LEFT JOIN diagnosa di ON rm.id_rekam_medis = di.id_rekam_medis
-LEFT JOIN resep r ON rmview_laporan_harian.id_rekam_medis = r.id_rekam_medis
+LEFT JOIN resep r ON rm.id_rekam_medis = r.id_rekam_medis
 LEFT JOIN obat o ON r.id_obat = o.id_obat
 LEFT JOIN vital v ON rm.id_rekam_medis = v.id_rekam_medis
 GROUP BY pf.tgl_daftar, po.nama_poli, d.nama_dokter
@@ -664,6 +664,7 @@ BEGIN
     );
 END//
 
+DELIMITER //
 -- TRIGGER untuk DELETE (hapus data pasien)
 CREATE TRIGGER tr_audit_pasien_delete
 AFTER DELETE ON pasien
@@ -686,7 +687,6 @@ END//
 
 DELIMITER ;
 
-USE db_rumah_sakit;
 
 -- FUNCTION 1 : MENGHITUNG USIA PASIEN
 DELIMITER //
@@ -721,7 +721,7 @@ END //
 
 DELIMITER ;
 
--- Contoh : Cari pasien lansia (usia > 20 tahun)
+-- Contoh : Cari pasien (usia > 20 tahun)
 SELECT 
     nama_pasien,
     tgl_lahir,
@@ -729,7 +729,10 @@ SELECT
 FROM pasien
 WHERE fn_hitung_usia(tgl_lahir) > 20;
 
+
 -- FUNCTION 2 : MENGHITUNG TOTAL BIAYA OBAT
+DROP FUNCTION IF EXISTS fn_total_biaya_obat;
+
 DELIMITER //
 
 CREATE FUNCTION fn_total_biaya_obat(p_id_rekam_medis VARCHAR(10))
@@ -747,10 +750,10 @@ BEGIN
     WHERE r.id_rekam_medis = p_id_rekam_medis;
     
     RETURN v_total;
-    
 END //
 
 DELIMITER ;
+
 SELECT 
     rm.id_rekam_medis,
     p.nama_pasien,
