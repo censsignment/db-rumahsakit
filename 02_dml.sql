@@ -6,9 +6,8 @@ INSERT INTO poli (id_poli, nama_poli, lokasi)
 VALUES
 ('POL01', 'Umum', 'Gedung A Lantai 1'),
 ('POL02', 'Penyakit Dalam', 'Gedung C Lantai 2'),
-('POL03', 'Penyakit Dalam', 'Gedung C Lantai 2'),
-('POL04', 'Bedah', 'Gedung D Lantai 3'),
-('POL05', 'Gigi dan Mulut', 'Gedung E Lantai 1');
+('POL03', 'Bedah', 'Gedung D Lantai 3'),
+('POL04', 'Gigi dan Mulut', 'Gedung E Lantai 1');
 
 
 -- =====================================
@@ -18,9 +17,9 @@ INSERT INTO dokter (id_dokter, id_poli, nama_dokter, spesialis)
 VALUES
 ('D01', 'POL01', 'dr. Andi Wirawan', 'Dokter Umum'),
 ('D02', 'POL01', 'dr. Siti Rahayu', 'Dokter Umum'),
-('D03', 'POL03', 'dr. Hendra Prasetyo, Sp.PD', 'Spesialis Penyakit Dalam'),
+('D03', 'POL02', 'dr. Hendra Prasetyo, Sp.PD', 'Spesialis Penyakit Dalam'),
 ('D04', 'POL04', 'dr. Rizky Firmansyah, Sp.B', 'Spesialis Bedah'),
-('D05', 'POL05', 'drg. Fajar Nugroho, Sp.KG', 'Spesialis Konservasi Gigi'),
+('D05', 'POL03', 'drg. Fajar Nugroho, Sp.KG', 'Spesialis Konservasi Gigi'),
 ('D06', 'POL02', 'dr. Lina Marlina, Sp.PD', 'Spesialis Penyakit Dalam');
 
 
