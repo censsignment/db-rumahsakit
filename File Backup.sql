@@ -277,6 +277,7 @@ VALUES
 ('RM14', 'PE07', 'D03', 'Batuk kronis 3 minggu, keringat malam, turun BB', 'Suhu subfebris, ronki halus puncak paru', '2026-01-12'),
 ('RM19', 'PE08', 'D06', 'Sering pusing, tegang di leher, sulit tidur', 'TD 160/100, diagnosis hipertensi grade II', '2026-01-13'),
 ('RM22', 'PE09', 'D03', 'Kontrol rutin DM dan hipertensi, obat hampir habis', 'GDA 185 mg/dL, TD 140/90', '2026-01-19'),
+('RM10', 'PE10','D03','Nyeri dada, mudah lelah, sering pusing (kunjungan ke-2)','TD 148/90, GDS 175 mg/dL, terkontrol sebagian','2026-01-12'),
 ('RM23', 'PE11', 'D02', 'Pilek berulang sejak sebulan, sering bersin pagi', 'Mukosa hidung edema, sekret jernih', '2026-01-20'),
 ('RM24', 'PE12', 'D01', 'Sakit tenggorokan dan demam', 'Tonsil membesar dan hiperemis', '2026-01-20'),
 ('RM25', 'PE13', 'D05', 'Sakit gigi geraham bawah, gusi bengkak', 'Perikoronitis gigi 38', '2026-01-20'),
@@ -546,6 +547,8 @@ LEFT JOIN obat o ON r.id_obat = o.id_obat
 JOIN dokter dok ON rm.id_dokter = dok.id_dokter
 JOIN poli po ON dok.id_poli = po.id_poli;
 
+SELECT * FROM view_riwayat_pasien
+WHERE id_pasien = 'PA01';
 -- =====================================================
 -- VIEW 2: view_laporan_harian
 -- =====================================================
@@ -573,6 +576,8 @@ LEFT JOIN obat o ON r.id_obat = o.id_obat
 LEFT JOIN vital v ON rm.id_rekam_medis = v.id_rekam_medis
 GROUP BY pf.tgl_daftar, po.nama_poli, d.nama_dokter
 ORDER BY pf.tgl_daftar DESC, jumlah_pasien DESC;
+
+SELECT * FROM view_laporan_harian;
 
 USE db_rumah_sakit; 
 DELIMITER //
@@ -687,6 +692,15 @@ END//
 
 DELIMITER ;
 
+INSERT INTO pasien (id_pasien, nama_pasien, jenis_kelamin, tgl_lahir, alamat, no_hp_pasien, gol_darah)
+VALUES ('PA26', 'Conrad Fisher', 'L', '2000-01-01', 'Jl. Gunung Muria', '08822222220', 'O');
+SELECT * FROM audit_log;
+
+UPDATE pasien SET nama_pasien = 'Jeremiah Fisher' WHERE id_pasien = 'PA26';
+SELECT * FROM audit_log;
+
+DELETE FROM pasien WHERE id_pasien = 'PA26';
+SELECT * FROM audit_log;
 
 -- FUNCTION 1 : MENGHITUNG USIA PASIEN
 DELIMITER //
